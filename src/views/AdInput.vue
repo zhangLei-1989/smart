@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="adInputWrap">
     <div class="adInput">
       <div class="header">
         <ul class="tabWrap">
@@ -17,9 +17,10 @@
           <li><i class="industry"></i>行业
           </li>
           <li>
-            <el-select v-model="value" placeholder="请选择" size="small">
+            <el-select v-model="selectIndustry" placeholder="请选择" size="small"
+                       popper-class="aaa">
               <el-option
-                v-for="item in options"
+                v-for="item in industryList"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -28,9 +29,9 @@
           </li>
           <li><i class="area"></i>地区</li>
           <li>
-            <el-select v-model="value" placeholder="请选择" size="small">
+            <el-select v-model="selectCity" placeholder="请选择" size="small">
               <el-option
-                v-for="item in options"
+                v-for="item in cityList"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -39,9 +40,10 @@
           </li>
         </ul>
       </div>
-      <div class="inputWrap">
-        <el-input type="textarea" class="inputCon" resize="none" v-model="article"></el-input>
-        <div class="inputBtn"><span class="clear">清空</span><span class="writeNum">{{article.length}}字/2000字</span></div>
+      <div class="inputWrap " :class="{isFocus: inputIsFocus}" >
+        <el-input type="textarea" class="inputCon" resize="none" v-model="article"
+                  @focus="inputFocus" @blur='inputBlur'></el-input>
+        <div class="inputBtn"><span class="clear" @click="clearInput">清空</span></div>
       </div>
       <div class="inputBottom">
         <router-link to="/result">
@@ -61,35 +63,172 @@ export default {
   data () {
     return {
       article: '',
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: ''
+      selectCity: '',
+      selectIndustry: '',
+      inputIsFocus: false,
+      industryList: [
+        {
+          value: 0,
+          label: '保健食品'
+        },
+        {
+          value: 1,
+          label: '投资金融'
+        },
+        {
+          value: 2,
+          label: '房地产'
+        },
+        {
+          value: 3,
+          label: '电子商务'
+        },
+        {
+          value: 4,
+          label: '社交媒体'
+        },
+        {
+          value: 5,
+          label: '游戏'
+        },
+        {
+          value: 6,
+          label: '化妆品'
+        },
+        {
+          value: 7,
+          label: '服饰'
+        },
+        {
+          value: 8,
+          label: '汽车'
+        },
+        {
+          value: 9,
+          label: '旅游'
+        },
+        {
+          value: 10,
+          label: '电子产品'
+        },
+        {
+          value: 11,
+          label: '教育培训'
+        },
+        {
+          value: 12,
+          label: '家具家装'
+        },
+        {
+          value: 13,
+          label: '母婴玩具'
+        },
+        {
+          value: 14,
+          label: '影视娱乐'
+        },
+        {
+          value: 15,
+          label: '普通食品'
+        },
+        {
+          value: 16,
+          label: '法律咨询'
+        },
+        {
+          value: 17,
+          label: '信息服务'
+        },
+        {
+          value: 18,
+          label: '医药器械'
+        },
+        {
+          value: 19,
+          label: '医疗服务'
+        },
+        {
+          value: 20,
+          label: '其他'
+        }
+      ],
+      cityList: [
+        {
+          value: '',
+          label: '全国'
+        },
+        {
+          value: '1',
+          label: '北京'
+        },
+        {
+          value: '2',
+          label: '上海'
+        },
+        {
+          value: '3',
+          label: '广东'
+        },
+        {
+          value: '4',
+          label: '江苏'
+        },
+        {
+          value: '5',
+          label: '浙江'
+        },
+        {
+          value: '6',
+          label: '河北'
+        },
+        {
+          value: '7',
+          label: '四川'
+        },
+        {
+          value: '8',
+          label: '福建'
+        },
+        {
+          value: '9',
+          label: '安徽'
+        },
+        {
+          value: '10',
+          label: '湖南'
+        },
+        {
+          value: '11',
+          label: '其他'
+        }
+      ]
     }
   },
   components: {
     mainFooter
+  },
+  methods: {
+    clearInput () {
+      this.article = ''
+    },
+    inputFocus () {
+      this.inputIsFocus = true
+    },
+    inputBlur () {
+      this.inputIsFocus = false
+    }
   }
 }
 </script>
 <style scoped text="text/scss" lang="scss">
+  .adInputWrap{
+    height: 80vh;
+    background:linear-gradient(to bottom,rgba(255, 255, 255, 1) 0%, rgba(240, 245, 255, 1) 50%,rgba(240, 245, 255, 1) 100%);
+  }
   /deep/.selectWrap .el-input__inner {
     font-size: 12px;
-    height: 20px;
-    line-height:  20px;
+    height: 24px;
+    line-height:  24px;
     width: 113px;
     background:rgba(241,243,250,1);
     border-radius:18px;
@@ -152,6 +291,9 @@ export default {
     padding: 18px 24px;
     border-radius:13px;
     position: relative;
+    &.isFocus{
+      box-shadow: 0 0 0  2px #9DD2FF;
+    }
     .inputBtn{
       position: absolute;
       right: 24px;
@@ -161,7 +303,7 @@ export default {
       color:rgba(132,144,166,1);
       cursor: pointer;
       font-size: 12px;
-      margin-right: 16px;
+      margin-right: 0;
     }
     .writeNum{
       color:rgba(182,190,207,1);
@@ -241,4 +383,5 @@ export default {
       color: rgba(52, 133, 251, 1);
     }
   }
+  /deep/.el-select-dropdown__item.selected{color:#409EFF;font-weight:400}
 </style>

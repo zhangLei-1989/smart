@@ -30,6 +30,11 @@ export default new Router({
       path: '/result',
       name: 'result',
       component: () => import(/* webpackChunkName: "result" */ './views/result')
+    },
+    {
+      path: '/relatedCases/:id',
+      name: 'relatedCases',
+      component: () => import(/* webpackChunkName: "relatedCases" */ './views/relatedCases')
     }
   ]
 })

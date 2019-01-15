@@ -2,14 +2,16 @@
   <div class="home">
     <div class="main">
        <div class="mainContent content">
-         <div class="mainLeft">
-           <div class="titleText"></div>
-           <div class="homeRule"></div>
-           <router-link to="/adinput">
-             <div class="startAudit"></div>
-           </router-link>
-         </div>
-         <div class="mainRight"></div>
+          <div class="contentWrap">
+            <div class="mainLeft">
+              <div class="titleText"></div>
+              <div class="homeRule"></div>
+              <router-link to="/adinput">
+                <div class="startAudit"></div>
+              </router-link>
+            </div>
+            <div class="mainRight"></div>
+          </div>
        </div>
      </div>
     <mainFooter></mainFooter>
@@ -35,12 +37,18 @@ export default {
   .home{
     background:linear-gradient(to bottom,rgba(255, 255, 255, 1) 0%, rgba(240, 245, 255, 1) 50%,rgba(240, 245, 255, 1) 100%);
   }
+  .contentWrap{
+    min-width: 1200px;
+    overflow-x: auto;
+  }
   .home{
     height: calc(100vh - 110px);
     overflow: hidden;
   }
   .content{
-    width: 1280px;
+    max-width: 1280px;
+    width: 89%;
+    overflow: auto;
     margin: 0 auto;
   }
   .headerContent{
@@ -84,6 +92,19 @@ export default {
       height:80px;
       background: url("../assets/image/homeStartBtn.png") no-repeat;
       background-size: contain;
+    }
+  }
+  @media screen and(max-width: 1280px) and (min-width: 1000px){
+    .mainContent {
+      margin-top: 0;
+      .mainLeft{
+        transform:scale(.8);
+        margin-top: 30px;
+      }
+      .mainRight{
+        transform:scale(.8);
+        margin-top: -20px;
+      }
     }
   }
 </style>
