@@ -3,7 +3,7 @@
     <div class="content">
       <div class="header">
         <div class="evaluate">
-          <div>0分</div>
+          <div>{{result.score}}分</div>
           <div>综合评分</div>
         </div>
         <div class="tab">
@@ -24,10 +24,7 @@
             <span class="titleLeft">审核原文</span>
             <span class="areaDesc">保健品 · 全国</span>
           </div>
-          <div class="articleLeftCon">
-            蜂胶有什么用？科学研究表明 ，蜂胶具有延缓血管老化等神奇功效。金奥力蜂胶软胶囊，国家专利产品 ，可有效治疗脑血栓 等各种心脑血管疾病，激活免疫力，吃一年，保你 三年好身体。最受 老年人欢迎的保健产品，无毒副作用 ，满意度 远超同类 产品，畅销15年 ，多次荣获 全国性大奖，深受消费者信赖，现在拨打电话，即可赠送 体验装。
-            蜂胶有什么用？科学研究表明 ，蜂胶具有延缓血管老化等神奇功效。金奥力蜂胶软胶囊，国家专利产品 ，可有效治疗脑血栓 等各种心脑血管疾病，激活免疫力，吃一年，保你 三年好身体。最受 老年人欢迎的保健产品，无毒副作用 ，满意度 远超同类 产品，畅销15年 ，多次荣获 全国性大奖，深受消费者信赖，现在拨打电话，即可赠送 体验装。
-            蜂胶有什么用？科学研究表明 ，蜂胶具有延缓血管老化等神奇功效。金奥力蜂胶软胶囊，国家专利产品 ，可有效治疗脑血栓 等各种心脑血管疾病，激活免疫力，吃一年，保你 三年好身体。最受 老年人欢迎的保健产品，无毒副作用 ，满意度 远超同类 产品，畅销15年 ，多次荣获 全国性大奖，深受消费者信赖，现在拨打电话，即可赠送 体验装。
+          <div class="articleLeftCon" v-html="article" @click="findTarget($event)">
           </div>
         </div>
         <div>
@@ -52,129 +49,34 @@
         </div>
         <div class="articleRightCon" :class="{articleRightConFxed:isFixed}">
           <div class="note">*相关案例按相关度从高到低排序</div>
-          <div class="item">
-            <div class="itemTitle">
-              <i class="itemNum">1</i>
-              <span>科学研究表明</span>
+          <div class="item" v-for="(item, index) in filterList" :key="index" :ref="'miao'+index">
+            <div class="itemTitle"
+             :class="{breakLaw: item.riskLevel=='涉嫌违法',risk: item.riskLevel=='高风险',evaluate: item.riskLevel=='需佐证',needSure: item.riskLevel=='应明确'}">
+              <i class="itemNum">{{index+1}}</i>
+              <span>{{item.name}}</span>
             </div>
             <ul class="listWrap">
               <li>
                 <div class="itemOption">风险等级：</div>
-                <div class="itemContent">需佐证</div>
+                <div class="itemContent">{{item.riskLevel}}</div>
               </li>
               <li>
                 <div class="itemOption">违规事由：</div>
-                <div class="itemContent">广告中含有“科学或研究发现”、“实验或数据证明”等方面的内容；</div>
+                <div class="itemContent">{{item.reason}}</div>
               </li>
-              <li>
+              <li v-for="(item2, index2) in item.illegal" :key="index2">
                 <div class="itemOption">违规依据：</div>
-                <div class="itemContent">《保健食品广告审查暂行规定》第八条第二款第（六）项</div>
-              </li>
-              <li>
+                <div class="itemContent reason">{{item2.name}}</div>
                 <div class="itemOption">违规内容：</div>
-                <div class="itemContent">“保健食品广告应当引导消费者合理使用保健食品，保健食品广告不得出现下列情形和内容：含有无法证实的所谓“科学或研究发现”、“实验或数据证明”等方面的内容；”</div>
+                <div class="itemContent">{{item2.content}}</div>
               </li>
               <li>
-                <div class="itemOption">相关案例：</div>
+                <div class="itemOption" v-show="item.similar.length>0">相关案例：</div>
                 <div class="itemContent">
                   <ol>
-                    <li>
-                      <p @click="test">关于上海禾健时代邮购有限公司广告违法案_静市监案处字〔2016〕第060201612963号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
-                    </li>
-                    <li>
-                      <p @click="test">关于山东广播电视台发布“苗红蜂胶软胶囊”违法广告案_济工商广处字〔2015〕120055号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
-                    </li>
-                    <li>
-                      <p @click="test">上海科院药房有限公司涉嫌发布违法广告案_徐市监案处字〔2016〕第040201610293号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
-                    </li>
-                  </ol>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="item">
-            <div class="itemTitle">
-              <i class="itemNum">1</i>
-              <span>科学研究表明</span>
-            </div>
-            <ul class="listWrap">
-              <li>
-                <div class="itemOption">风险等级：</div>
-                <div class="itemContent">需佐证</div>
-              </li>
-              <li>
-                <div class="itemOption">违规事由：</div>
-                <div class="itemContent">广告中含有“科学或研究发现”、“实验或数据证明”等方面的内容；</div>
-              </li>
-              <li>
-                <div class="itemOption">违规依据：</div>
-                <div class="itemContent">《保健食品广告审查暂行规定》第八条第二款第（六）项</div>
-              </li>
-              <li>
-                <div class="itemOption">违规内容：</div>
-                <div class="itemContent">“保健食品广告应当引导消费者合理使用保健食品，保健食品广告不得出现下列情形和内容：含有无法证实的所谓“科学或研究发现”、“实验或数据证明”等方面的内容；”</div>
-              </li>
-              <li>
-                <div class="itemOption">相关案例：</div>
-                <div class="itemContent">
-                  <ol>
-                    <li>
-                      <p @click="test">关于上海禾健时代邮购有限公司广告违法案_静市监案处字〔2016〕第060201612963号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
-                    </li>
-                    <li>
-                      <p @click="test">关于山东广播电视台发布“苗红蜂胶软胶囊”违法广告案_济工商广处字〔2015〕120055号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
-                    </li>
-                    <li>
-                      <p @click="test">上海科院药房有限公司涉嫌发布违法广告案_徐市监案处字〔2016〕第040201610293号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
-                    </li>
-                  </ol>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="item">
-            <div class="itemTitle">
-              <i class="itemNum">1</i>
-              <span>科学研究表明</span>
-            </div>
-            <ul class="listWrap">
-              <li>
-                <div class="itemOption">风险等级：</div>
-                <div class="itemContent">需佐证</div>
-              </li>
-              <li>
-                <div class="itemOption">违规事由：</div>
-                <div class="itemContent">广告中含有“科学或研究发现”、“实验或数据证明”等方面的内容；</div>
-              </li>
-              <li>
-                <div class="itemOption">违规依据：</div>
-                <div class="itemContent">《保健食品广告审查暂行规定》第八条第二款第（六）项</div>
-              </li>
-              <li>
-                <div class="itemOption">违规内容：</div>
-                <div class="itemContent">“保健食品广告应当引导消费者合理使用保健食品，保健食品广告不得出现下列情形和内容：含有无法证实的所谓“科学或研究发现”、“实验或数据证明”等方面的内容；”</div>
-              </li>
-              <li>
-                <div class="itemOption">相关案例：</div>
-                <div class="itemContent">
-                  <ol>
-                    <li>
-                      <p @click="test">关于上海禾健时代邮购有限公司广告违法案_静市监案处字〔2016〕第060201612963号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
-                    </li>
-                    <li>
-                      <p @click="test">关于山东广播电视台发布“苗红蜂胶软胶囊”违法广告案_济工商广处字〔2015〕120055号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
-                    </li>
-                    <li>
-                      <p @click="test">上海科院药房有限公司涉嫌发布违法广告案_徐市监案处字〔2016〕第040201610293号</p>
-                      <span>上海市静安区市场监督管理局][912016年9月8日]</span>
+                    <li v-for="(item3, index) in item.similar" :key="index">
+                      <p @click="goRelatedCase(item3.id)">{{item3.title}}</p>
+                      <span>{{item3.institution}} [{{item3.punishTime}}]</span>
                     </li>
                   </ol>
                 </div>
@@ -192,18 +94,23 @@
 </template>
 
 <script>
-
 export default {
   name: 'result',
   data () {
     return {
-      aaa: '4224242342',
+      result: {},
+      posTop: [],
+      topIndex: 0,
+      boundingTop: [],
       isFixed: false,
       articleContentWidth: 0,
       articleRightWidth: 0,
       topTabIndex: 0,
       rightTabIndex: 0,
-      tabContentText: '违法广告',
+      tabContentText: '',
+      currentRiskLevel: '全部',
+      listVo: [],
+      article: '',
       tabTopOption: [
         {
           text: '涉嫌违法',
@@ -274,6 +181,15 @@ export default {
     next()
   },
   computed: {
+    filterList () {
+      let list = []
+      if (this.currentRiskLevel === '全部') {
+        list = this.listVo
+      } else {
+        list = this.listVo.filter((item) => this.currentRiskLevel === item.riskLevel)
+      }
+      return list
+    },
     articleRightStyle () {
       if (!this.articleContentWidth || !this.articleRightWidth) {
         return {}
@@ -304,12 +220,96 @@ export default {
   created () {
     this.$store.dispatch('toggleBtnFixed', true)
   },
+  mounted () {
+    window.addEventListener('scroll', this.watchScroll)
+    this.articleRightWidth = parseInt(this.getStyle(this.$refs.articleRight, 'width'))
+    this.articleContentWidth = parseInt(this.getStyle(this.$refs.articleContent, 'width'))
+    this.initData()
+  },
   components: {
   },
   methods: {
+    goRelatedCase (id) {
+      this.$router.push({
+        path: `/relatedCases/${id}`
+      })
+    },
+    findTarget (e) {
+      // const html = e.target.innerHTML
+      const attr = e.target.getAttribute('data-riskLevel')
+      const index = e.target.getAttribute('data-index')
+      if (!attr) {
+        return
+      }
+      // this.currentRiskLevel = attr
+      // this.rightTabOption[this.rightTabIndex].activeClass['active'] = false
+      // this.rightTabOption[index].activeClass['active'] = true
+      // this.rightTabIndex = index
+      if (index < 1) {
+        document.body.scrollTop = document.documentElement.scrollTop = 380
+        this.topIndex = index
+        return
+      }
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      // var flag = 'miao' + (index )
+      if (scrollTop < 300) {
+        document.body.scrollTop = document.documentElement.scrollTop = 380
+      }
+      let dist = 0
+      if (this.topIndex > index) {
+        dist = this.posTop[index] - this.posTop[0]
+      } else {
+        dist = this.posTop[index] - this.posTop[0]
+      }
+      alert(dist)
+      document.body.scrollTop = document.documentElement.scrollTop = 380 + Math.abs(dist) - 40
+      this.topIndex = index
+    },
+    initData () {
+      const result = JSON.parse(sessionStorage.getItem('saveResult'))
+      this.result = result
+      let str = sessionStorage.getItem('article')
+      this.tabTopOption.forEach((item) => {
+        item.code = result.scoreVo[item.text].join('')
+        item.number = result.scoreVo[item.text].length
+      })
+      this.listVo = result.listVo
+      // 处理左侧文本
+      this.result.key.forEach((item, index) => {
+        let reg = new RegExp(item.name)
+        let className = ''
+        switch (item.riskLevel) {
+          case '涉嫌违法':
+            className = 'breakLaw'
+            break
+          case '高风险':
+            className = 'risk'
+            break
+          case '需佐证':
+            className = 'evaluate'
+            break
+          case '应明确':
+            className = 'needSure'
+            break
+        }
+        str = str.replace(reg, `<span class=" textFlag ${className}" data-riskLevel="${item.riskLevel}"
+           data-index="${index}">${item.name}</span>`)
+      })
+      this.article = str
+      this.tabContentText = result.scoreVo['涉嫌违法'].join('')
+      setTimeout(() => {
+        for (var i = 0; i < this.filterList.length; i++) {
+          var flag = 'miao' + i
+          console.log(this.$refs[flag])
+          this.posTop.push(this.$refs[flag][0].offsetTop)
+        }
+        console.log(this.posTop)
+      }, 200)
+    },
+    updated () {
+    },
     toggleTab (item, index) {
-      let arr = ['违法广告', '高风险广告', '需佐证风险', '应明确广告']
-      this.tabContentText = arr[index]
+      this.tabContentText = item.code
       this.topTabIndex = index
     },
     changRightTab (item, index) {
@@ -317,13 +317,11 @@ export default {
         this.rightTabOption[this.rightTabIndex].activeClass['active'] = false
         item.activeClass['active'] = true
         this.rightTabIndex = index
+        this.currentRiskLevel = item.text
       }
       if (this.isFixed) {
         document.body.scrollTop = document.documentElement.scrollTop = 380
       }
-    },
-    test () {
-      window.open('/relatedCases/120', '_blank')
     },
     watchScroll () {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -340,11 +338,6 @@ export default {
         return getComputedStyle(obj, null)[styleName]
       }
     }
-  },
-  mounted () {
-    window.addEventListener('scroll', this.watchScroll)
-    this.articleRightWidth = parseInt(this.getStyle(this.$refs.articleRight, 'width'))
-    this.articleContentWidth = parseInt(this.getStyle(this.$refs.articleContent, 'width'))
   }
 }
 </script>
@@ -501,11 +494,46 @@ export default {
       color: #fff;
       margin-right: 10px;
     }
-
     .itemTitle {
       color: #4989D4;
       font-size: 14px;
       margin-bottom: 16px;
+      &.breakLaw{
+        span {
+          color: #D9524E;
+        }
+        i{
+          background: #D9524E;
+          color: #fff;
+        }
+      }
+      &.risk{
+        span {
+          color: #D88A04;
+        }
+        i{
+          background: #D88A04;
+          color: #fff;
+        }
+      }
+      &.evaluate{
+        span {
+          color: #4989D4;
+        }
+        i{
+          background: #4989D4;
+          color: #fff;
+        }
+      }
+      &.needSure{
+        span {
+          color: #6CAA5C;
+        }
+        i{
+          background: #6CAA5C;
+          color: #fff;
+        }
+      }
     }
 
     .articleRightCon {
@@ -751,6 +779,9 @@ export default {
     color: rgba(132, 144, 166, 1);
     background: #fff;
   }
+  .reason{
+    margin-bottom: 10px;
+  }
   @media screen and(max-width: 1280px) and (min-width: 1000px) {
     .articleLeft {
       & > div:nth-of-type(1) {
@@ -761,5 +792,27 @@ export default {
     .articleContent {
       margin-bottom: 20px;
     }
+  }
+</style>
+<style>
+  .articleLeft .breakLaw{
+    background: #D9524E !important;
+  }
+  .articleLeft .risk{
+    background: #D88A04;
+  }
+  .articleLeft .evaluate{
+    background: #4989D4;
+  }
+  .articleLeft .needSure{
+    background: #6CAA5C;
+  }
+  .articleLeft .textFlag{
+    padding: 0 3px;
+    border-radius:4px;
+    color: #fff;
+    display: inline-block;
+    line-height: 24px;
+    cursor: pointer;
   }
 </style>

@@ -6,23 +6,22 @@
           <span class="keyWord">关键词：</span>
           <span>科学研究证明</span>
           <span class="view">查看：</span>
-          <span class="doBtn">第一个</span>
-          <span class="doBtn">上一个</span>
-          <span class="doBtn">下一个</span>
+          <span class="doBtn" @click="first">第一个</span>
+          <span class="doBtn" @click="prev">上一个</span>
+          <span class="doBtn" @click="next">下一个</span>
         </div>
       </div>
     </div>
     <div class="content">
       <div class="articleTitle">
-        <h2>济南市工商行政管理局 行政处罚决定书</h2>
-        <p>济南市工商行政管理局 | 济工商广处字〔2015〕120055号 | 2015年8月6日</p>
+        <h2>{{result.title}}</h2>
+        <p>{{result.institution}} | {{result.caseflag}} | {{result.punish_time}}</p>
       </div>
       <div class="articleCon">
         <div class='partiesConcerned'> 当事人：
           <span>山东广播电视台 </span>
         </div>
-        <div>
-          当事人：山东广播电视台 经查：当事人于2015年４月１日在山东体育频道发布的“苗红蜂胶软胶囊”(康蓓健牌蜂蛟软胶囊 )食品广告，广告中有“主持人说：经，蜂胶对糖尿病、高血压、心脑血管疾病、呼吸系统疾病、肾病肾虚、肿瘤放化疗、妇科病、失眠、体弱免疫差等有特殊治疗效果”的内容。“苗红蜂胶软胶囊”是保健食品，批准文号：国食健字G20140561。其行为违反了《中华人民共和国广告法》 第十九条的、《保健食品广告审查暂行规定》第八条第二款第（六）项的规定。广告费用6000元。 主要证据有： 证据一：对山东广播电视台授权委托人所作的询问（调查）笔录1份。证明当事人发布“苗红蜂胶软胶囊”(康蓓健牌蜂蛟软胶囊)广告的事实及广告费用的相关情况。 证据二：当事人的《广告经营许可证》复印件及其授权委托人身份证复印件 、授权委托书各1份。证明当事人的经营许可情况和被委托人的身份。 证据三：当事人发布“苗红蜂胶软胶囊”(康蓓健牌蜂蛟软胶囊)广告的广播音频文件1份，并摘录广播内容由当事人的委托人签字确认。证明当事人发布上述违法广告的事实。 证据四：当事人发布“苗红蜂胶软胶囊”(康蓓 健牌蜂蛟软胶囊)广告的广告费用收费发票1份，广告发布合同1份，情况说明1份。证明当事人发布违法广告的具体情况。 以上证据和笔录均由当事人、证据提供人签名（盖章）认可。 本案调查终结后，2015年7月31日本局向当事人直接送达了济工商广听告字[2015]第120055号《济南市工商行政 管理局行政处罚听证告知书》，告知当事人本局拟作出的行政处罚事实、理由、依据及处罚内容。 当事人在收到告知书之日起三个工作日内未向本局陈述、申辩，也未要求听证。本局认为，当事人发布的“苗红蜂胶软胶囊”(康蓓健牌蜂蛟软胶囊)广告，违反了《中华人民共和国广告法》第十九条“食品、酒类、化妆品广告的内容必须符合卫生许可的事项，并不得使用医疗用语或者易与药品混淆的用语”的规定，构成发布违法医疗广告的行为。 《保健食品广告审查暂行规定》第八条第二款第（六）项“保健食品广告应当引导消费者合理使用保健食品，保健食品广告不得出现下列情形和内容：（六）含有无法证实的所谓“科学或研究发现”、“实验或数据证明”等方面的内容。” 依据《中华人民共和国广告法》第四十一条“违反本法第十四条至第十七条、第十九条规定，发布药品、医疗器械、农药、食品、酒类 、化妆品广告的，或者违反本法第三十一条规定发布广告的，由广告监督管理机关责令负有责任的 广告主、广告经营者、广告发布者改正或者停止发布，没收广告费用，可以并处广告费用一倍以上五倍以下的罚款；情节严重的，依法停止其广告业务”的规定，责令当事人停止发布“苗红蜂胶软胶囊”(康蓓健牌蜂蛟软胶囊)违法广告，并处罚如下： 1、没收广告费用6000元； 2、罚款18000元，上缴国库。 当事人应于收到本处罚决定之日起十五日内予以履行，将罚款缴到济南市区内银行代收罚款网点，逾期不缴纳，每日按罚款数额的3%加处罚款。当事人如不服本处罚决定，可在收到本处罚决定之日起六十日内向山东省工商行政管理局或济南市人民政 府行政复议办公室申请复议，也可以在十五日内向济南市市中区人民法院提起诉讼。逾期不申请行政复议也不提起行政诉讼，又不履行本局处罚决定的，本局将依法申请人民法院强制执行。本决定自送达当事人时发生法律效力。 济南市工商行政管理局 2015年8月6日
+        <div v-html="result.pdf_format_content">
         </div>
       </div>
     </div>
@@ -33,10 +32,45 @@
 <script>
 import mainFooter
   from '../components/footer'
+import { auditSimilar } from '@/api/examine.js'
 
 export default {
   name: 'relatedCases',
+  data () {
+    return {
+      currentIndex: 0,
+      textIndexArr: [],
+      result: {
+      }
+    }
+  },
   methods: {
+    scrollTo (index) {
+      document.body.scrollTop = document.documentElement.scrollTop = Math.floor(this.textIndexArr[index] / 60) * 30
+    },
+    first () {
+      this.currentIndex = 1
+      this.scrollTo(this.currentIndex)
+    },
+    next () {
+      if (this.currentIndex >= this.textIndexArr.length - 1) {
+        return
+      }
+      document.querySelectorAll('.miao')[this.currentIndex].className = 'miao'
+      this.currentIndex += 1
+      document.querySelectorAll('.miao')[this.currentIndex].className += ' selectActive'
+      this.scrollTo(this.currentIndex)
+    },
+    prev () {
+      if (this.currentIndex <= 0) {
+        this.currentIndex = 0
+        return
+      }
+      document.querySelectorAll('.miao')[this.currentIndex].className = 'miao'
+      this.currentIndex -= 1
+      document.querySelectorAll('.miao')[this.currentIndex].className += ' selectActive'
+      this.scrollTo(this.currentIndex)
+    },
     searchSubStr (str, subStr) {
       var arr = []
       let pos = str.indexOf(subStr)
@@ -45,12 +79,38 @@ export default {
         pos = str.indexOf(subStr, pos + 1)
       }
       return arr
+    },
+    fetchData () {
+      const that = this
+      const data = {
+        id: this.$route.params.id
+      }
+      auditSimilar(data).then((res) => {
+        if (res.data.code === 1) {
+          let str = res.data.result['_source']['pdf_format_content']
+          let reg = new RegExp('上海', 'g')
+          this.result = res.data.result['_source']
+          let i = 0
+          let arr = []
+          this.result['pdf_format_content'] = str.replace(reg, function (text, textIndex, index, msg) {
+            i++
+            arr.push(textIndex)
+            return `<span data-index="${i}" class="miao">${text}</span>`
+          })
+          that.textIndexArr = arr
+          console.log(document.querySelectorAll('.miao'))
+          setTimeout(function () {
+            document.querySelectorAll('.miao')[0].className += ' selectActive'
+          }, 100)
+        }
+      })
     }
   },
   mounted () {
   },
   created () {
     this.$store.dispatch('toggleTopFixed', true)
+    this.fetchData()
   },
   components: {
     mainFooter
@@ -78,6 +138,7 @@ export default {
     .partiesConcerned {
       padding-bottom: 20px;
     }
+    word-break: break-all;
   }
 
   .articleTitle {
@@ -152,5 +213,19 @@ export default {
     width: 100%;
     position: fixed;
     top: 105px;
+  }
+</style>
+<style>
+  .miao{
+    display: inline-block;
+    padding: 0 3px;
+  }
+  .selectActive{
+    background-color: #3485FB;
+    display: inline-block;
+    border-radius:4px;
+    line-height: 24px;
+    color: #fff;
+    color: #fff;
   }
 </style>

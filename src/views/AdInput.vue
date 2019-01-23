@@ -3,13 +3,13 @@
     <div class="adInput">
       <div class="header">
         <ul class="tabWrap">
-          <li class="active">
+          <li class="active" >
             <i></i> 文字审核
           </li>
-          <li class="image">
+          <li class="image" @click="toggleTab">
             <i></i> 图片审核
           </li>
-          <li class="web">
+          <li class="web" @click="toggleTab">
             <i></i> 网址审核
           </li>
         </ul>
@@ -23,7 +23,7 @@
                 v-for="item in industryList"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value">
+                :value="item.label">
               </el-option>
             </el-select>
           </li>
@@ -34,7 +34,7 @@
                 v-for="item in cityList"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value">
+                :value="item.label">
               </el-option>
             </el-select>
           </li>
@@ -46,9 +46,9 @@
         <div class="inputBtn"><span class="clear" @click="clearInput">清空</span></div>
       </div>
       <div class="inputBottom">
-        <router-link to="/result">
-          <div class="btn"></div>
-        </router-link>
+        <!--<router-link to="/result">-->
+        <!--</router-link>-->
+        <div class="btn" @click="saveInput"></div>
       </div>
     </div>
     <main-footer></main-footer>
@@ -57,13 +57,14 @@
 <script>
 import mainFooter
   from '../components/footer'
+import { auditText } from '@/api/examine.js'
 
 export default {
   name: 'AdInput',
   data () {
     return {
       article: '',
-      selectCity: '',
+      selectCity: '全国',
       selectIndustry: '',
       inputIsFocus: false,
       industryList: [
@@ -208,6 +209,38 @@ export default {
     mainFooter
   },
   methods: {
+    toggleTab () {
+      this.$message({
+        message: '此功能还在努力开发中哟',
+        type: 'warning'
+      })
+    },
+    saveInput () {
+      const sendData = {
+        region: this.selectCity,
+        text: this.article.trim(),
+        type: this.selectIndustry
+      }
+      if (!sendData.type) {
+        this.$message.error('请选择行业')
+        return
+      }
+      if (!sendData.text) {
+        this.$message.error('请输入需要审核的内容')
+        return
+      }
+      console.log(sendData)
+      auditText(sendData).then((res) => {
+        if (res.data.code === 1) {
+          this.$store.dispatch('saveResult', res.data.result)
+          sessionStorage.setItem('saveResult', JSON.stringify(res.data.result))
+          sessionStorage.setItem('article', sendData.text)
+          this.$router.push({
+            path: '/result'
+          })
+        }
+      })
+    },
     clearInput () {
       this.article = ''
     },
