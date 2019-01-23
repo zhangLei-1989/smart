@@ -261,7 +261,6 @@ export default {
       } else {
         dist = this.posTop[index] - this.posTop[0]
       }
-      alert(dist)
       document.body.scrollTop = document.documentElement.scrollTop = 380 + Math.abs(dist) - 40
       this.topIndex = index
     },
@@ -276,7 +275,7 @@ export default {
       this.listVo = result.listVo
       // 处理左侧文本
       this.result.key.forEach((item, index) => {
-        let reg = new RegExp(item.name)
+        let reg = new RegExp(item.name, 'g')
         let className = ''
         switch (item.riskLevel) {
           case '涉嫌违法':
@@ -300,7 +299,6 @@ export default {
       setTimeout(() => {
         for (var i = 0; i < this.filterList.length; i++) {
           var flag = 'miao' + i
-          console.log(this.$refs[flag])
           this.posTop.push(this.$refs[flag][0].offsetTop)
         }
         console.log(this.posTop)
