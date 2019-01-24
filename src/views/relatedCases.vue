@@ -4,7 +4,7 @@
       <div class="title">
         <div class="keyWordWrap">
           <span class="keyWord">关键词：</span>
-          <span>科学研究证明</span>
+          <span>{{this.$route.query.type}}</span>
           <span class="view">查看：</span>
           <span class="doBtn" @click="first">第一个</span>
           <span class="doBtn" @click="prev">上一个</span>
@@ -84,12 +84,12 @@ export default {
     fetchData () {
       const that = this
       const data = {
-        id: this.$route.params.id
+        id: this.$route.query.id
       }
       auditSimilar(data).then((res) => {
         if (res.data.code === 1) {
           let str = res.data.result['_source']['pdf_format_content']
-          let reg = new RegExp('上海', 'g')
+          let reg = new RegExp(this.$route.query.type, 'g')
           this.result = res.data.result['_source']
           let i = 0
           let arr = []
@@ -115,6 +115,10 @@ export default {
   },
   components: {
     mainFooter
+  },
+  beforeRouteLeave (to, from, next) {
+    this.$store.dispatch('toggleTopFixed', false)
+    next()
   }
 }
 </script>
@@ -171,9 +175,9 @@ export default {
 
   .content {
     width: 1000px;
-    margin: 24px auto 48px auto;
+    margin: 0 auto 48px auto;
     box-sizing: border-box;
-    padding: 20px 32px 32px 32px;
+    padding: 0 32px 32px 32px;
     background: #fff;
   }
 

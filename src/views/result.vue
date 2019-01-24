@@ -22,7 +22,7 @@
         <div>
           <div class="title">
             <span class="titleLeft">审核原文</span>
-            <span class="areaDesc">保健品 · 全国</span>
+            <span class="areaDesc">{{this.$route.query.selectIndustry}} · {{this.$route.query.selectCity}}</span>
           </div>
           <div class="articleLeftCon" v-html="article" @click="findTarget($event)">
           </div>
@@ -75,7 +75,7 @@
                 <div class="itemContent">
                   <ol>
                     <li v-for="(item3, index) in item.similar" :key="index">
-                      <p @click="goRelatedCase(item3.id)">{{item3.title}}</p>
+                      <p @click="goRelatedCase(item3.id,item.name)">{{item3.title}}</p>
                       <span>{{item3.institution}} [{{item3.punishTime}}]</span>
                     </li>
                   </ol>
@@ -229,47 +229,39 @@ export default {
   components: {
   },
   methods: {
-    goRelatedCase (id) {
-      this.$router.push({
-        path: `/relatedCases/${id}`
+    goRelatedCase (id, type) {
+      const { href } = this.$router.resolve({
+        path: `/relatedCases`,
+        query: {
+          id,
+          type
+        }
       })
+      window.open(href, '_blank')
     },
     findTarget (e) {
-      // const html = e.target.innerHTML
-      const attr = e.target.getAttribute('data-riskLevel')
-      const index = e.target.getAttribute('data-index')
-      if (!attr) {
-        return
-      }
-      // this.currentRiskLevel = attr
-      // this.rightTabOption[this.rightTabIndex].activeClass['active'] = false
-      // this.rightTabOption[index].activeClass['active'] = true
-      // this.rightTabIndex = index
-      if (index < 1) {
-        document.body.scrollTop = document.documentElement.scrollTop = 380
+      this.rightTabOption[this.rightTabIndex].activeClass['active'] = false
+      this.rightTabOption[0].activeClass['active'] = true
+      this.rightTabIndex = 0
+      this.currentRiskLevel = '全部'
+      setTimeout(() => {
+        const attr = e.target.getAttribute('data-riskLevel')
+        const index = e.target.getAttribute('data-index')
+        if (!attr) {
+          return
+        }
+        let dist = 0
+        dist = this.posTop[index] - this.posTop[0]
+        document.body.scrollTop = document.documentElement.scrollTop = Math.max(380 + Math.abs(dist) - 40, 380)
         this.topIndex = index
-        return
-      }
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      // var flag = 'miao' + (index )
-      if (scrollTop < 300) {
-        document.body.scrollTop = document.documentElement.scrollTop = 380
-      }
-      let dist = 0
-      if (this.topIndex > index) {
-        dist = this.posTop[index] - this.posTop[0]
-      } else {
-        dist = this.posTop[index] - this.posTop[0]
-      }
-      document.body.scrollTop = document.documentElement.scrollTop = 380 + Math.abs(dist) - 40
-      this.topIndex = index
+      }, 0)
     },
     initData () {
       const result = JSON.parse(sessionStorage.getItem('saveResult'))
       this.result = result
       let str = sessionStorage.getItem('article')
       this.tabTopOption.forEach((item) => {
-        item.code = result.scoreVo[item.text].join('')
+        item.code = result.scoreVo[item.text].join('   ')
         item.number = result.scoreVo[item.text].length
       })
       this.listVo = result.listVo
@@ -295,13 +287,12 @@ export default {
            data-index="${index}">${item.name}</span>`)
       })
       this.article = str
-      this.tabContentText = result.scoreVo['涉嫌违法'].join('')
+      this.tabContentText = result.scoreVo['涉嫌违法'].join('  ')
       setTimeout(() => {
         for (var i = 0; i < this.filterList.length; i++) {
           var flag = 'miao' + i
           this.posTop.push(this.$refs[flag][0].offsetTop)
         }
-        console.log(this.posTop)
       }, 200)
     },
     updated () {
@@ -310,7 +301,7 @@ export default {
       this.tabContentText = item.code
       this.topTabIndex = index
     },
-    changRightTab (item, index) {
+    changRightTab (item, index, flag) {
       if (this.rightTabIndex !== index) {
         this.rightTabOption[this.rightTabIndex].activeClass['active'] = false
         item.activeClass['active'] = true
@@ -466,6 +457,8 @@ export default {
 
         .itemOption, .itemContent {
           float: left;
+          li{
+          }
         }
 
         .itemContent {
@@ -654,6 +647,7 @@ export default {
     padding: 17px 20px;
     color: #444a55;
     font-size: 14px;
+    overflow: auto;
   }
 
   .evaluate {

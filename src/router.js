@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -32,9 +32,16 @@ export default new Router({
       component: () => import(/* webpackChunkName: "result" */ './views/result')
     },
     {
-      path: '/relatedCases/:id',
+      path: '/relatedCases',
       name: 'relatedCases',
       component: () => import(/* webpackChunkName: "relatedCases" */ './views/relatedCases')
     }
   ]
 })
+
+// 全局路由守卫
+router.beforeEach((to, from, next) => {
+  next() // 必须使用 next ,执行效果依赖 next 方法的调用参数
+})
+
+export default router

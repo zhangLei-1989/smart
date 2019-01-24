@@ -2,6 +2,7 @@
   <div>
     <header :class="{barFixed: tabBar.tabIsFixed}">
       <div class="headerContent content">
+        <div class="logo" @click="goHome"></div>
         <router-link to="/adinput" v-show="tabBar.buttonShow"
         >
           <div class="nextBtn">审核下一个</div>
@@ -19,6 +20,11 @@ export default {
     ...mapGetters([
       'tabBar'
     ])
+  },
+  methods: {
+    goHome () {
+      this.$router.push({ name: 'home' })
+    }
   }
 }
 </script>
@@ -45,13 +51,18 @@ export default {
     max-width: 1280px;
     width: 89%;
     margin: 0 auto;
-  }
-
-  .headerContent {
     line-height: 80px;
     height: 80px;
+  }
+
+  .logo {
+    line-height: 80px;
+    margin-top: 20px;
+    height: 40px;
+    width: 266px;
     background: url("../assets/image/homeLogo.png") no-repeat center left;
     background-size: 266px 40px;
+    float: left;
   }
 
   .barFixed {
