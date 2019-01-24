@@ -16,7 +16,6 @@ export default {
     }
   },
   create () {
-    alert(this.changeClass)
   }
 }
 </script>
