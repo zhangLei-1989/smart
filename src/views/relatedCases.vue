@@ -49,6 +49,7 @@ export default {
       document.body.scrollTop = document.documentElement.scrollTop = Math.floor(this.textIndexArr[index] / 60) * 30
     },
     first () {
+      document.querySelectorAll('.miao')[this.currentIndex].className = 'miao'
       this.currentIndex = 0
       document.querySelectorAll('.miao')[this.currentIndex].className += ' selectActive'
       this.scrollTo(this.currentIndex)

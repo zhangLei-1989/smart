@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="articleContent " ref="articleContent">
-      <div class="articleLeft" :class="{leftFixed:isFixed}" :style="articleRightStyle">
+      <div class="articleLeft" ref="articleLeft" :class="{leftFixed:isFixed}">
         <div>
           <div class="title">
             <span class="titleLeft">审核原文</span>
@@ -222,9 +222,10 @@ export default {
   },
   mounted () {
     window.addEventListener('scroll', this.watchScroll)
-    this.articleRightWidth = parseInt(this.getStyle(this.$refs.articleRight, 'width'))
-    this.articleContentWidth = parseInt(this.getStyle(this.$refs.articleContent, 'width'))
     this.initData()
+    console.log(document.querySelector('.articleRight'))
+    this.articleRightWidth = this.getStyle(document.querySelector('.articleRight'), 'width')
+    this.articleContentWidth = this.getStyle(this.$refs.articleContent, 'width')
   },
   components: {
   },
@@ -535,6 +536,8 @@ export default {
       padding: 16px 24px;
       font-weight: 400;
       color: rgba(68, 74, 85, 1);
+      width: 480px;
+      box-sizing: border-box;
       font-size: 14px;
       line-height: 35px;
       height: calc(100% - 100px);
@@ -542,6 +545,7 @@ export default {
     }
 
     .articleLeft {
+      width: 480px;
       dl, dt, dd {
         margin: 0;
         padding: 0;
@@ -557,13 +561,14 @@ export default {
         height: calc(100vh - 340px);
         position: relative;
         overflow: hidden;
+        width: 480px;
       }
 
       & > div:nth-of-type(2) {
         margin-top: 24px;
         box-sizing: border-box;
         padding: 16px 24px;
-
+        width: 480px;
         dt {
           margin-bottom: 9px;
           font-size: 14px;
@@ -579,7 +584,6 @@ export default {
 
       box-sizing: border-box;
       float: left;
-      width: 37.5%;
       border-radius: 10px;
 
       .titleLeft {
@@ -597,13 +601,14 @@ export default {
     .articleRight {
       background: #fff;
       float: right;
-      width: calc(62.5% - 16px);
+      width: calc(100% - 496px);
       border-radius: 10px;
 
       .title {
         padding-top: 12px;
         box-sizing: border-box;
-
+        &.active {
+        }
         ul {
           overflow: hidden;
         }
@@ -746,6 +751,7 @@ export default {
   .fixed {
     position: fixed;
     top: 24px;
+    width: calc(66.5% - 480px);
     box-shadow: 0 -30px 0   #F0F5FF;
   }
 
@@ -779,6 +785,7 @@ export default {
       & > div:nth-of-type(1) {
         height: calc(100vh - 300px) !important;
         min-height: 0 !important;
+        width: 480px;
       }
     }
     .articleContent {
